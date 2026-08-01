@@ -47,11 +47,7 @@ const STATUS_OPTIONS = ['Bersih', 'Kurang Bersih', 'Kotor'];
 const STATUS_TONES = ['bersih', 'kurang', 'kotor'];
 
 function getBaseUrl() {
-  if (window.location.hostname === "erilia3712-tech.github.io") {
-    return "https://erilia3712-tech.github.io/cleaning-Up";
-  }
-
-  return window.location.origin.replace(/\/$/, "");
+  return "https://erilia3712-tech.github.io/cleaning-Up";
 }
 
 function buildAppUrl(path, params = {}) {
