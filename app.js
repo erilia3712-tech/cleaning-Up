@@ -46,14 +46,12 @@ const CHECK_ITEMS = ['Kamar mandi', 'Kaca', 'Lantai', 'Toilet', 'Wastafel'];
 const STATUS_OPTIONS = ['Bersih', 'Kurang Bersih', 'Kotor'];
 const STATUS_TONES = ['bersih', 'kurang', 'kotor'];
 
-function getBaseUrl(){
-  const injectedBase = window.__APP_BASE_URL__;
-  if(injectedBase && /^https?:\/\//i.test(injectedBase)) {
-    return injectedBase.replace(/\/$/, '');
+function getBaseUrl() {
+  if (window.location.hostname === "erilia3712-tech.github.io") {
+    return "https://erilia3712-tech.github.io/cleaning-Up";
   }
 
-  const currentOrigin = window.location.origin || 'http://localhost:3000';
-  return currentOrigin.replace(/\/$/, '');
+  return window.location.origin.replace(/\/$/, "");
 }
 
 function buildAppUrl(path, params = {}){
