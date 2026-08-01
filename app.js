@@ -54,14 +54,23 @@ function getBaseUrl() {
   return window.location.origin.replace(/\/$/, "");
 }
 
-function buildAppUrl(path, params = {}){
-  const baseUrl = getBaseUrl();
-  const url = new URL(path, `${baseUrl}/`);
+function buildAppUrl(path, params = {}) {
+  let baseUrl;
+
+  if (window.location.hostname === "erilia3712-tech.github.io") {
+    baseUrl = "https://erilia3712-tech.github.io/cleaning-Up";
+  } else {
+    baseUrl = window.location.origin;
+  }
+
+  const url = new URL(path, baseUrl + "/");
+
   Object.entries(params).forEach(([key, value]) => {
-    if(value !== undefined && value !== null && value !== '') {
+    if (value !== undefined && value !== null && value !== "") {
       url.searchParams.set(key, String(value));
     }
   });
+
   return url.toString();
 }
 
