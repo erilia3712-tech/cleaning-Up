@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cleaning Up - Daftar Ruangan</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="index">
+  <div class="app-shell">
+    <header class="hero">
+      <div>
+        <span class="badge">🧹 Cleaning Up</span>
+        <h1>Monitoring kebersihan ruangan jadi lebih cepat</h1>
+        <p>Pindai QR atau buka halaman ruangan langsung dari daftar di bawah ini.</p>
+        <p id="server-address" class="subtle">Memuat alamat server...</p>
+      </div>
+      <div class="hero-panel">
+        <div class="hero-stat">19 Ruangan</div>
+        <div class="hero-stat">3 Status</div>
+      </div>
+    </header>
+
+    <main class="rooms">
+      <section class="floor-card">
+        <div class="floor-title">
+          <h2>🏢 Lantai Bawah</h2>
+          <span>Ruangan lantai bawah</span>
+        </div>
+        <div class="room-list" id="floor-down"></div>
+      </section>
+
+      <section class="floor-card">
+        <div class="floor-title">
+          <h2>🏢 Lantai Atas</h2>
+          <span>Ruangan lantai atas</span>
+        </div>
+        <div class="room-list" id="floor-up"></div>
+      </section>
+    </main>
+
+    <footer class="footer-note">
+      <small>Terimakasih.</small>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

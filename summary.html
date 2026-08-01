@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cleaning Up - Rekap Bulanan</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="summary">
+  <div class="app-shell">
+    <header class="page-header">
+      <div>
+        <a id="back-to-room" href="index.html" class="back">← Kembali</a>
+        <h1 id="room-title">Rekap Bulanan</h1>
+        <p class="subtle">Lihat ringkasan data per bulan untuk ruangan ini.</p>
+      </div>
+    </header>
+
+    <main class="page-card">
+      <div id="room-info" class="room-summary"></div>
+
+      <div class="date-controls">
+        <label class="field-group">
+          <span>Pilih Bulan</span>
+          <input type="month" id="summary-month" />
+        </label>
+      </div>
+
+      <section class="summary-card">
+        <div class="summary-header">
+          <h3>Ringkasan Bulan</h3>
+          <div id="month-report-stats" class="summary-stats"></div>
+        </div>
+        <div id="month-report-list" class="month-summary-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
