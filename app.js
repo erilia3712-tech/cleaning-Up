@@ -49,8 +49,7 @@ const TOILET_CEWE_CHECK_ITEMS = [
   'Cermin',
   'Wastafel',
   'Lantai',
-  'Tempat Sampah',
-  'Kaca'
+  'Tempat Sampah'
 ];
 
 // Kondisi Kebersihan - Toilet Laki-Laki (cowo)
@@ -60,8 +59,7 @@ const TOILET_COWO_CHECK_ITEMS = [
   'Cermin',
   'Wastafel',
   'Lantai',
-  'Tempat Sampah',
-  'Kaca'
+  'Tempat Sampah'
 ];
 
 // ===================== PEKERJAAN YANG DILAKUKAN =====================
@@ -430,10 +428,45 @@ function loadRoomPage(){
   const monthInput = document.getElementById('record-month');
   const cleanerInput = document.getElementById('record-cleaner');
   const noteInput = document.getElementById('record-note');
+  const roomInstructions = document.getElementById('room-instructions');
   const saveBtn = document.getElementById('save-btn');
   const updateBtn = document.getElementById('update-btn');
   const deleteBtn = document.getElementById('delete-btn');
   const resetBtn = document.getElementById('reset-btn');
+
+  if(roomInstructions){
+    if(room.type === 'room'){
+      roomInstructions.innerHTML = `
+        <strong>Untuk ruangan biasa</strong>
+        <p><strong>Kondisi Kebersihan</strong> dinilai per objek: Meja / Sofa / Lantai / Tempat Sampah / List Kaca / Kaca.</p>
+        <p>Setiap objek pilih: 🟢 Bersih, 🟡 Kurang Bersih, 🔴 Kotor, atau ⚫ Rusak.</p>
+        <p>“Pekerjaan yang dilakukan” dicatat terpisah dan bukan status objek.</p>
+        <ul>
+          <li>☑ Mengelap meja</li>
+          <li>☑ Membersihkan sofa</li>
+          <li>☑ Menyapu lantai</li>
+          <li>☑ Mengepel lantai</li>
+          <li>☑ Membuang sampah</li>
+          <li>☑ Membersihkan kaca</li>
+        </ul>
+      `;
+    } else {
+      roomInstructions.innerHTML = `
+        <strong>Untuk toilet</strong>
+        <p><strong>Kondisi Kebersihan</strong> dinilai per item toilet: Closet / Cermin / Wastafel / Lantai / Tempat Sampah.</p>
+        <p>Setiap item pilih: 🟢 Bersih, 🟡 Kurang Bersih, 🔴 Kotor, atau ⚫ Rusak.</p>
+        <p>“Pekerjaan yang dilakukan” dicatat terpisah dan bukan status item.</p>
+        <ul>
+          <li>☑ Membersihkan closet</li>
+          <li>☑ Membersihkan wastafel</li>
+          <li>☑ Membersihkan cermin</li>
+          <li>☑ Menyapu lantai</li>
+          <li>☑ Mengepel lantai</li>
+          <li>☑ Membuang sampah</li>
+        </ul>
+      `;
+    }
+  }
 
   let currentStatuses = Array(items.length).fill('');
   let currentWorks = Array(workItems.length).fill(false);

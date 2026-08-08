@@ -12,14 +12,12 @@
       <div>
         <a href="index.html" class="back">← Kembali</a>
         <h1 id="room-title">Ruangan</h1>
-        <p class="subtle">Kondisi Kebersihan: nilai objek ruangan (Meja, Sofa, Lantai, Tempat Sampah, List Kaca, Kaca).</p>
-        <p class="subtle">Pekerjaan yang dilakukan dicatat terpisah sebagai checklist cleaner.</p>
-<div id="barcode-container" style="text-align:center;margin-bottom:12px">
-  <div id="barcode-qr" class="qr" style="display:none;margin:0 auto;"></div>
-  <div id="barcode-label" class="barcode-label" style="display:none;margin-top:8px;"></div>
-</div>
+        <p class="subtle">Isi form berikut dengan hasil cek kebersihan dan pekerjaan yang dilakukan.</p>
+      </div>
+      <div id="barcode-label" class="barcode-label" style="display:none;margin-top:8px;"></div>
+    </header>
 
-      <div id="room-info" class="room-summary"></div>
+    <div id="room-info" class="room-summary"></div>
       <div class="date-controls">
         <label class="field-group">
           <span>Tanggal</span>
@@ -35,22 +33,7 @@
         </label>
       </div>
 
-      <div class="instruction-box">
-        <strong>Untuk ruangan biasa</strong>
-        <p><strong>Kondisi Kebersihan</strong> dinilai per objek:
-        Meja / Sofa / Lantai / Tempat Sampah / List Kaca / Kaca.
-        Setiap objek dipilih: 🟢 Bersih, 🟡 Kurang Bersih, 🔴 Kotor, atau ⚫ Rusak.</p>
-        <p>Jadi “ngelap meja” tidak perlu menjadi pilihan penilaian.</p>
-        <p><strong>Pekerjaan yang dilakukan</strong> dicatat terpisah, misalnya:</p>
-        <ul>
-          <li>☑ Mengelap meja</li>
-          <li>☑ Membersihkan sofa</li>
-          <li>☑ Menyapu lantai</li>
-          <li>☑ Mengepel lantai</li>
-          <li>☑ Membuang sampah</li>
-          <li>☑ Membersihkan kaca</li>
-        </ul>
-      </div>
+      <div id="room-instructions" class="instruction-box"></div>
 
       <div id="history-summary" class="history-summary"></div>
 
