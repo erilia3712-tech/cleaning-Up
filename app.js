@@ -19,7 +19,7 @@ const ROOMS = [
 
   // ----- Lantai Atas (12) -----
   {id:'la-pak-kapus', floor:'Lantai Atas', name:'Ruang Pak Kapus', type:'room', rooms:'ruang'},
-  {id:'la-spri', floor:'Lantai Atas', name:'Ruang Spri', type:'room', rooms:'ruang'},
+  {id:'la-spri', floor:'Lantai Atas', name:'Ruang Aspri', type:'room', rooms:'ruang'},
   {id:'la-podcast', floor:'Lantai Atas', name:'Ruang Podcast', type:'room', rooms:'ruang'},
   {id:'la-ppe', floor:'Lantai Atas', name:'Ruang PP&E', type:'room', rooms:'ruang'},
   {id:'la-sertifikasi', floor:'Lantai Atas', name:'Ruang Sertifikasi', type:'room', rooms:'ruang'},
