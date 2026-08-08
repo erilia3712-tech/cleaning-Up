@@ -87,6 +87,9 @@ body{
 .back{display:inline-block;text-decoration:none;color:var(--accent);font-weight:700;margin-bottom:6px}
 .subtle{margin:0;color:var(--muted)}
 .page-card{background:var(--card);border-radius:24px;padding:20px;box-shadow:0 14px 32px rgba(15, 23, 42, 0.06)}
+.instruction-box{background:rgba(255,255,255,0.9);border:1px solid rgba(0,0,0,0.08);border-radius:10px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,0.05);font-size:0.95rem;line-height:1.5;color:var(--text);margin-bottom:12px}
+.instruction-box strong{display:block;margin-bottom:6px}
+.instruction-box ul{margin:8px 0 0 16px;padding:0;list-style:disc}
 .room-summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .info-pill{padding:8px 12px;border-radius:999px;background:#eef4ff;color:var(--accent);font-weight:600}
 .checklist-card{display:grid;gap:10px}
