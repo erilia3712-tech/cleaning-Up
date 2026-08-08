@@ -1,51 +1,89 @@
+// ===================== DATA RUANGAN =====================
+// type: 'room'  => ruangan biasa (7 item pembersihan)
+// type: 'toilet'=> toilet (5 item khusus toilet)
 const ROOMS = [
-  {id:'lb-perlengkapan', floor:'Lantai Bawah', name:'Perlengkapan'},
-  {id:'lb-gudang', floor:'Lantai Bawah', name:'Gudang'},
-  {id:'lb-keuangan', floor:'Lantai Bawah', name:'Keuangan'},
-  {id:'lb-tu', floor:'Lantai Bawah', name:'TU'},
-  {id:'lb-perpustakaan', floor:'Lantai Bawah', name:'Perpustakaan'},
-  {id:'lb-kamar-mandi-2-cewe', floor:'Lantai Bawah', name:'Kamar Mandi Bawah 2 Cewe'},
-  {id:'lb-kamar-mandi-2-cowok', floor:'Lantai Bawah', name:'Kamar Mandi Bawah 2 Cowok'},
-  {id:'lb-klinik', floor:'Lantai Bawah', name:'Klinik'},
-  {id:'lb-wc-cewe', floor:'Lantai Bawah', name:'WC Cewe'},
-  {id:'lb-wc-cowok', floor:'Lantai Bawah', name:'WC Cowok'},
-  {id:'la-ppe', floor:'Lantai Atas', name:'Ruang PP&E'},
-  {id:'la-aspri', floor:'Lantai Atas', name:'Ruang Aspri'},
-  {id:'la-rapat', floor:'Lantai Atas', name:'Ruang Rapat'},
-  {id:'la-mushola', floor:'Lantai Atas', name:'Mushola'},
-  {id:'la-kerma', floor:'Lantai Atas', name:'Ruang Kerma'},
-  {id:'la-divisi', floor:'Lantai Atas', name:'Ruang Divisi'},
-  {id:'la-kaka-fajri', floor:'Lantai Atas', name:'Ruang Kaka Fajri'},
-  {id:'la-wc-cewe', floor:'Lantai Atas', name:'WC Cewe'},
-  {id:'la-wc-cowok', floor:'Lantai Atas', name:'WC Cowok'}
+  // ----- Lantai Bawah (11) -----
+  {id:'lb-klinik', floor:'Lantai Bawah', name:'Ruang Klinik', type:'room'},
+  {id:'lb-perpus', floor:'Lantai Bawah', name:'Ruang Perpus', type:'room'},
+  {id:'lb-tu', floor:'Lantai Bawah', name:'Ruang TU', type:'room'},
+  {id:'lb-keuangan', floor:'Lantai Bawah', name:'Ruang Keuangan', type:'room'},
+  {id:'lb-perkap', floor:'Lantai Bawah', name:'Ruang Perkap', type:'room'},
+  {id:'lb-toilet-klinik-cewe', floor:'Lantai Bawah', name:'Toilet Perempuan (Dekat Klinik)', type:'toilet'},
+  {id:'lb-toilet-klinik-cowo', floor:'Lantai Bawah', name:'Toilet Laki-Laki (Dekat Klinik)', type:'toilet'},
+  {id:'lb-toilet-dapur-cewe', floor:'Lantai Bawah', name:'Toilet Perempuan (Dekat Dapur)', type:'toilet'},
+  {id:'lb-toilet-dapur-cowo', floor:'Lantai Bawah', name:'Toilet Laki-Laki (Dekat Dapur)', type:'toilet'},
+  {id:'lb-gudang-perkap', floor:'Lantai Bawah', name:'Gudang Perkap', type:'room'},
+  {id:'lb-gudang-laundry', floor:'Lantai Bawah', name:'Gudang Laundry', type:'room'},
+  {id:'lb-gudang-chemicals', floor:'Lantai Bawah', name:'Gudang Chemicals', type:'room'},
+  {id:'lb-lobby', floor:'Lantai Bawah', name:'Lobby', type:'room'},
+
+  // ----- Lantai Atas (12) -----
+  {id:'la-pak-kapus', floor:'Lantai Atas', name:'Ruang Pak Kapus', type:'room'},
+  {id:'la-spri', floor:'Lantai Atas', name:'Ruang Spri', type:'room'},
+  {id:'la-podcast', floor:'Lantai Atas', name:'Ruang Podcast', type:'room'},
+  {id:'la-ppe', floor:'Lantai Atas', name:'Ruang PP&E', type:'room'},
+  {id:'la-sertifikasi', floor:'Lantai Atas', name:'Ruang Sertifikasi', type:'room'},
+  {id:'la-rapat', floor:'Lantai Atas', name:'Ruang Rapat', type:'room'},
+  {id:'la-kabid', floor:'Lantai Atas', name:'Ruang Kabid', type:'room'},
+  {id:'la-kerma', floor:'Lantai Atas', name:'Ruang Kerma', type:'room'},
+  {id:'la-wi', floor:'Lantai Atas', name:'Ruang WI', type:'room'},
+  {id:'la-mushola', floor:'Lantai Atas', name:'Mushola', type:'room'},
+  {id:'la-toilet-cewe', floor:'Lantai Atas', name:'Toilet Perempuan', type:'toilet'},
+  {id:'la-toilet-cowo', floor:'Lantai Atas', name:'Toilet Laki-Laki', type:'toilet'}
 ];
 
-const BARCODE_IMAGES = {
-  'lb-perlengkapan': 'pk.png',
-  'lb-gudang': 'gd.png',
-  'lb-keuangan': 'keuangan.png',
-  'lb-tu': 'tu.png',
-  'lb-perpustakaan': 'perpus.png',
-  'lb-kamar-mandi-2-cewe': 'kamar-mandi-2-cewe.png',
-  'lb-kamar-mandi-2-cowok': 'kamar-mandi-2-cowok.png',
-  'lb-klinik': 'klinik.png',
-  'lb-wc-cewe': 'wc-cewe.png',
-  'lb-wc-cowok': 'wc-cowok.png',
-  'la-ppe': 'ppe.png',
-  'la-aspri': 'aspri.png',
-  'la-rapat': 'rapat.png',
-  'la-mushola': 'mushola.png',
-  'la-kerma': 'kerma.png',
-  'la-divisi': 'divisi.png',
-  'la-kaka-fajri': 'kaka-fajri.png',
-  'la-wc-cewe': 'wc-cewe-atas.png',
-  'la-wc-cowok': 'wc-cowok-atas.png'
-};
+// ===================== ITEM PEMBERSIHAN =====================
+// Ruangan biasa
+const ROOM_CHECK_ITEMS = [
+  'Ngelap meja',
+  'Sofa',
+  'Menyapu',
+  'Mengepel',
+  'Buang sampah',
+  'List kaca',
+  'Kaca'
+];
 
-const CHECK_ITEMS = ['Kamar mandi', 'Kaca', 'Lantai', 'Toilet', 'Wastafel'];
-const STATUS_OPTIONS = ['Bersih', 'Kurang Bersih', 'Kotor'];
-const STATUS_TONES = ['bersih', 'kurang', 'kotor'];
+// Toilet (sesuai data MCP & pengecekan toilet)
+const TOILET_CHECK_ITEMS = [
+  'Closet',
+  'Urinoir',
+  'Westafel',
+  'Lantai',
+  'Kaca'
+];
 
+// ===================== STATUS =====================
+// 1 = Bersih (B), 2 = Kurang Bersih (X), 3 = Kotor, 4 = Rusak
+const STATUS_OPTIONS = ['Bersih', 'Kurang Bersih', 'Kotor', 'Rusak'];
+const STATUS_TONES = ['bersih', 'kurang', 'kotor', 'rusak'];
+
+// Standar MCP - Master Cleaning Program (Toilet)
+const MCP_STANDARDS = [
+  {no:1, area:'Pintu masuk', standar:'Bersih, kering, tak ada noda'},
+  {no:2, area:'Dinding sekat', standar:'Bersih, kering, tak ada sawang-sawang'},
+  {no:3, area:'Washtafel', standar:'Bersih, kering, tak ada noda/plak'},
+  {no:4, area:'Cermin besar', standar:'Bersih, licin, tak kusam, tak ada noda'},
+  {no:5, area:'Kloset duduk', standar:'Bersih, tak ada noda, kering'},
+  {no:6, area:'Dinding kloset', standar:'Bersih, tak ada noda/plak'},
+  {no:7, area:'Lantai toilet', standar:'Bersih, kering, tak berlumut'},
+  {no:8, area:'Tempat sampah', standar:'Bersih, kering, tak berbau'},
+  {no:9, area:'Jet shower', standar:'Bersih, tak karat, tak bocor'},
+  {no:10, area:'Selang + kran air', standar:'Bersih, tak karat, tak bocor'},
+  {no:11, area:'Urinoir', standar:'Bersih, kering, tak bernoda/plak'},
+  {no:12, area:'Tabung hand soap', standar:'Kuat, tak bocor, tak tersumbat'},
+  {no:13, area:'Exhaust fan', standar:'Bersih, tak rusak, kokoh'},
+  {no:14, area:'Kaca dinding', standar:'Bersih, tak rusak, kokoh'},
+  {no:15, area:'Handuk', standar:'Bersih, kering, tak bernoda'}
+];
+
+// Status pengecekan toilet: B (Bersih) / X (Kurang Bersih)
+const CEK_STATUS = ['B', 'X'];
+
+// Daftar kolom pengecekan toilet (form user)
+const CEK_COLUMNS = ['Wastafel','Closet','Urinoir','Cermin','Shower','Lantai','Pewangi','Handsoap'];
+
+// ===================== HUB/PEMBANTU LINK =====================
 function getBaseUrl() {
   return "https://erilia3712-tech.github.io/cleaning-Up";
 }
@@ -76,6 +114,12 @@ function getQrTargetUrl(roomId){
   return buildAppUrl('room.html', {id: room.id});
 }
 
+function getCheckItems(room){
+  if(!room) return ROOM_CHECK_ITEMS;
+  return room.type === 'toilet' ? TOILET_CHECK_ITEMS : ROOM_CHECK_ITEMS;
+}
+
+// ===================== PENAMPIL DAFTAR RUANGAN (index) =====================
 function createIndex(){
   const down = document.getElementById('floor-down');
   const up = document.getElementById('floor-up');
@@ -89,22 +133,30 @@ function createIndex(){
 
   ROOMS.forEach(r=>{
     const card = document.createElement('div'); card.className='room-card';
+    const typeBadge = document.createElement('span');
+    typeBadge.className = r.type === 'toilet' ? 'type-badge type-toilet' : 'type-badge type-room';
+    typeBadge.textContent = r.type === 'toilet' ? '🚻 Toilet' : '🪑 Ruangan';
     const title = document.createElement('h3'); title.textContent = r.name;
     const sub = document.createElement('div'); sub.className='room-meta'; sub.textContent = r.floor;
     const qrWrap = document.createElement('div'); qrWrap.className='qr';
     const link = getQrTargetUrl(r.id);
-    new QRCode(qrWrap, {text:link,width:140,height:140});
+    try { new QRCode(qrWrap, {text:link,width:140,height:140}); } catch(e){}
     const a = document.createElement('a'); a.href = link; a.className='room-link'; a.textContent = 'Buka halaman';
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener');
-    card.appendChild(title); card.appendChild(sub); card.appendChild(qrWrap); card.appendChild(a);
+    const head = document.createElement('div'); head.className='room-card-head';
+    head.appendChild(title); head.appendChild(typeBadge);
+    card.appendChild(head); card.appendChild(sub); card.appendChild(qrWrap); card.appendChild(a);
     if(r.floor.includes('Bawah')) down.appendChild(card); else up.appendChild(card);
   });
 }
 
+// ===================== PENGELOLAAN DATA (localStorage CRUD) =====================
 function getRoomById(id){return ROOMS.find(r=>r.id===id)}
+
 function getRoomStorageKey(roomId){ return `checklist_${roomId}`; }
 
+// Struktur data per record: {statuses:[...], note:'...', cleaner:'...', savedAt:'ISO'}
 function readRoomData(roomId){
   try {
     const parsed = JSON.parse(localStorage.getItem(getRoomStorageKey(roomId)) || '{}');
@@ -126,10 +178,10 @@ function getCurrentRecord(data, monthKey, dateKey){
   return data?.[monthKey]?.[dateKey] || null;
 }
 
-function setCurrentRecord(data, monthKey, dateKey, statuses){
+function setCurrentRecord(data, monthKey, dateKey, statuses, note, cleaner){
   if(!monthKey || !dateKey) return data;
   if(!data[monthKey]) data[monthKey] = {};
-  data[monthKey][dateKey] = {statuses, savedAt:new Date().toISOString()};
+  data[monthKey][dateKey] = {statuses, note: note || '', cleaner: cleaner || '', savedAt:new Date().toISOString()};
   return data;
 }
 
@@ -140,6 +192,7 @@ function removeCurrentRecord(data, monthKey, dateKey){
   return data;
 }
 
+// ===================== FORMAT TAMBAHAN =====================
 function formatMonthLabel(monthKey){
   if(!monthKey) return 'Belum dipilih';
   const [year, month] = monthKey.split('-');
@@ -157,9 +210,11 @@ function getStatusLabel(value){
   if(value === 1) return 'Bersih';
   if(value === 2) return 'Kurang Bersih';
   if(value === 3) return 'Kotor';
+  if(value === 4) return 'Rusak';
   return 'Belum diisi';
 }
 
+// ===================== REKAP SINGKAT (history-summary) =====================
 function renderHistorySummary(data){
   const el = document.getElementById('history-summary');
   if(!el) return;
@@ -177,6 +232,7 @@ function renderHistorySummary(data){
     : '<div class="history-pill"><strong>Belum ada riwayat</strong><span>Data akan muncul setelah disimpan.</span></div>';
 }
 
+// ===================== REKAP BULANAN (summary page) =====================
 function loadSummaryPage(){
   const params = new URLSearchParams(location.search);
   const id = params.get('id');
@@ -209,16 +265,18 @@ function renderMonthReport(roomId, data, monthKey){
   const listEl = document.getElementById('month-report-list');
   if(!statsEl || !listEl) return;
 
+  const items = getCheckItems(getRoomById(roomId));
   const monthData = data?.[monthKey] || {};
   const entries = Object.entries(monthData).sort(([a], [b]) => b.localeCompare(a));
   const totalDays = entries.length;
-  const completedDays = entries.filter(([, record]) => Array.isArray(record?.statuses) && record.statuses.every(v => v !== '')).length;
-  const statusCounts = {bersih:0, kurang:0, kotor:0};
+  const completedDays = entries.filter(([, record]) => Array.isArray(record?.statuses) && record.statuses.length === items.length).length;
+  const statusCounts = {bersih:0, kurang:0, kotor:0, rusak:0};
   entries.forEach(([, record]) => {
     (record?.statuses || []).forEach(value => {
       if(value === 1) statusCounts.bersih += 1;
       if(value === 2) statusCounts.kurang += 1;
       if(value === 3) statusCounts.kotor += 1;
+      if(value === 4) statusCounts.rusak += 1;
     });
   });
 
@@ -228,6 +286,7 @@ function renderMonthReport(roomId, data, monthKey){
       <span class="summary-chip">${totalDays} hari tercatat</span>
       <span class="summary-chip">${completedDays} hari lengkap</span>
       <span class="summary-chip">${Math.round((completedDays / totalDays) * 100)}% selesai</span>
+      ${statusCounts.rusak > 0 ? `<span class="summary-chip chip-rusak">⚠️ ${statusCounts.rusak} item rusak</span>` : ''}
     `
     : '<span class="summary-chip">Belum ada data</span>';
 
@@ -237,17 +296,19 @@ function renderMonthReport(roomId, data, monthKey){
   }
 
   listEl.innerHTML = entries.map(([dateKey, record]) => {
-    const filled = Array.isArray(record.statuses) && record.statuses.every(v => v !== '');
-    const statusText = record.statuses
-      .map(getStatusLabel)
-      .map(val => val === 'Belum diisi' ? '–' : val)
-      .join(' · ');
-    return `<div class="month-summary-item">
+    const filled = Array.isArray(record.statuses) && record.statuses.length === items.length;
+    const statuses = record.statuses || [];
+    const statusText = items.map((it, i) => `${it}: ${getStatusLabel(statuses[i])}`).join(' · ');
+    const hasRusak = statuses.some(v => v === 4);
+    const note = record.note ? `<div class="month-note">📝 ${record.note}</div>` : '';
+    const cleaner = record.cleaner ? `<span>👤 ${record.cleaner}</span>` : '';
+    return `<div class="month-summary-item ${hasRusak ? 'item-rusak' : ''}">
       <div class="month-summary-title">
-        <span>${formatDateLabel(dateKey)}</span>
-        <span>${filled ? '✅ Lengkap' : '⚠️ Belum lengkap'}</span>
+        <span>${formatDateLabel(dateKey)} ${cleaner}</span>
+        <span>${filled ? '✅ Lengkap' : '⚠️ Belum lengkap'} ${hasRusak ? '• 🔧 Rusak' : ''}</span>
       </div>
       <div class="month-summary-meta"><span>${statusText}</span></div>
+      ${note}
     </div>`;
   }).join('');
 }
@@ -264,6 +325,7 @@ function showStatusMessage(message){
   el.textContent = message;
 }
 
+// ===================== HALAMAN DETAIL RUANGAN (room page) =====================
 function loadRoomPage(){
   const params = new URLSearchParams(location.search);
   const id = params.get('id');
@@ -272,24 +334,35 @@ function loadRoomPage(){
   const summary = document.getElementById('room-info');
   if(!room){ title.textContent='Ruangan tidak ditemukan'; summary.innerHTML=''; return }
   title.textContent = `${room.floor} — ${room.name}`;
-  summary.innerHTML = `<span class="info-pill">📍 ${room.floor}</span><span class="info-pill">🧼 ${room.name}</span>`;
+  summary.innerHTML = `<span class="info-pill">📍 ${room.floor}</span><span class="info-pill">🧼 ${room.name}</span>${room.type === 'toilet' ? '<span class="info-pill">🚻 Toilet</span>' : ''}`;
 
   const barcodeQr = document.getElementById('barcode-qr');
   if(barcodeQr){
     const qrLink = getQrTargetUrl(room.id);
     barcodeQr.innerHTML = '';
-    new QRCode(barcodeQr, {text: qrLink, width: 140, height: 140});
+    try { new QRCode(barcodeQr, {text: qrLink, width: 140, height: 140}); } catch(e){}
     barcodeQr.style.display = 'block';
   }
 
+  // Tampilkan tabel MCP jika toilet
+  const mcpSection = document.getElementById('mcp-section');
+  if(mcpSection && room.type === 'toilet'){
+    mcpSection.style.display = 'block';
+    renderMcpTable();
+  }
+
+  const items = getCheckItems(room);
   const form = document.getElementById('checklist-form');
   const dateInput = document.getElementById('record-date');
   const monthInput = document.getElementById('record-month');
+  const cleanerInput = document.getElementById('record-cleaner');
+  const noteInput = document.getElementById('record-note');
   const saveBtn = document.getElementById('save-btn');
   const updateBtn = document.getElementById('update-btn');
   const deleteBtn = document.getElementById('delete-btn');
+  const resetBtn = document.getElementById('reset-btn');
 
-  let currentStatuses = Array(CHECK_ITEMS.length).fill('');
+  let currentStatuses = Array(items.length).fill('');
   let currentData = readRoomData(room.id);
 
   const today = new Date();
@@ -303,10 +376,14 @@ function loadRoomPage(){
     const monthKey = monthInput.value;
     const dateKey = dateInput.value;
     const record = getCurrentRecord(currentData, monthKey, dateKey);
-    currentStatuses = Array(CHECK_ITEMS.length).fill('');
-    if(record?.statuses) currentStatuses = record.statuses.map(v => v ?? '');
+    currentStatuses = Array(items.length).fill('');
+    if(record?.statuses){
+      currentStatuses = items.map((_, i) => record.statuses[i] || '');
+    }
+    if(record?.cleaner && cleanerInput){ cleanerInput.value = record.cleaner || ''; }
+    if(record?.note && noteInput){ noteInput.value = record.note || ''; }
 
-    CHECK_ITEMS.forEach((it, idx) => {
+    items.forEach((it, idx) => {
       const row = document.createElement('div'); row.className='check-item';
       const label = document.createElement('div'); label.className='item-label'; label.textContent = it;
       const opts = document.createElement('div'); opts.className='status-options';
@@ -343,7 +420,9 @@ function loadRoomPage(){
     const monthKey = monthInput.value;
     const dateKey = dateInput.value;
     if(!monthKey || !dateKey) return;
-    currentData = setCurrentRecord(currentData, monthKey, dateKey, currentStatuses);
+    const note = noteInput ? noteInput.value.trim() : '';
+    const cleaner = cleanerInput ? cleanerInput.value.trim() : '';
+    currentData = setCurrentRecord(currentData, monthKey, dateKey, currentStatuses, note, cleaner);
     saveRoomData(room.id, currentData);
     renderHistorySummary(currentData);
     updateReportLink(room.id, monthKey);
@@ -368,23 +447,56 @@ function loadRoomPage(){
     const monthKey = monthInput.value;
     const dateKey = dateInput.value;
     if(!monthKey || !dateKey) return;
+    if(!confirm('Hapus data pengecekan untuk tanggal ini?')) return;
     currentData = removeCurrentRecord(currentData, monthKey, dateKey);
     saveRoomData(room.id, currentData);
-    currentStatuses = Array(CHECK_ITEMS.length).fill('');
+    currentStatuses = Array(items.length).fill('');
+    if(noteInput) noteInput.value = '';
+    if(cleanerInput) cleanerInput.value = '';
     renderChecklist();
     showStatusMessage('Data dihapus untuk tanggal ini.');
   });
+
+  if(resetBtn){
+    resetBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      currentStatuses = Array(items.length).fill('');
+      if(noteInput) noteInput.value = '';
+      if(cleanerInput) cleanerInput.value = '';
+      renderChecklist();
+      showStatusMessage('Form dikosongkan. Klik Simpan untuk menyimpan.');
+    });
+  }
 
   dateInput.addEventListener('change', renderChecklist);
   monthInput.addEventListener('change', renderChecklist);
   renderChecklist();
 }
 
-function showSavedAt(iso){
-  const el = document.getElementById('saved-at');
-  if(!el) return;
-  if(!iso){ el.textContent = ''; return }
-  const d = new Date(iso); el.textContent = `Tersimpan: ${d.toLocaleString()}`;
+// ===================== TABEL MCP TOILET =====================
+function renderMcpTable(){
+  const container = document.getElementById('mcp-standards');
+  if(!container) return;
+  let rows = '';
+  MCP_STANDARDS.forEach(s => {
+    rows += `<tr>
+      <td>${s.no}</td>
+      <td>${s.area}</td>
+      <td>${s.standar}</td>
+      <td class="cek-col"><button type="button" class="cek-btn" data-mcp="${s.no}">B</button>
+      <button type="button" class="cek-btn" data-mcp="${s.no}" style="margin-left:4px">X</button></td>
+    </tr>`;
+  });
+  container.innerHTML = rows;
+
+  // Interaksi tombol B/X pada tabel MCP
+  container.querySelectorAll('.cek-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const siblings = container.querySelectorAll(`.cek-btn[data-mcp="${btn.dataset.mcp}"]`);
+      siblings.forEach(s => s.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{
@@ -393,3 +505,4 @@ document.addEventListener('DOMContentLoaded', ()=>{
   if(page==='room') loadRoomPage();
   if(page==='summary') loadSummaryPage();
 });
+

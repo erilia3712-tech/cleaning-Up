@@ -31,20 +31,62 @@
           <span>Bulan</span>
           <input type="month" id="record-month" />
         </label>
+        <label class="field-group">
+          <span>Nama Cleaner</span>
+          <input type="text" id="record-cleaner" placeholder="Nama petugas" />
+        </label>
       </div>
 
       <div id="history-summary" class="history-summary"></div>
 
       <form id="checklist-form" class="checklist-card"></form>
 
+      <div class="date-controls" style="margin-top:14px">
+        <label class="field-group" style="grid-column:1 / -1">
+          <span>Keterangan / Catatan kerusakan (jika ada)</span>
+          <textarea id="record-note" rows="2" placeholder="Contoh: Engsel closet longgar, kran bocor, meja gores..."></textarea>
+        </label>
+      </div>
+
+      <div class="legend">
+        <span><i class="dot dot-b"></i> B = Bersih</span>
+        <span><i class="dot dot-x"></i> X = Kurang Bersih</span>
+        <span><i class="dot dot-kotor"></i> = Kotor</span>
+        <span><i class="dot dot-rusak"></i> = Rusak</span>
+      </div>
+
       <div class="actions">
         <button id="save-btn" type="button">💾 Simpan</button>
         <button id="update-btn" type="button" class="secondary-btn">🔄 Update</button>
+        <button id="reset-btn" type="button" class="secondary-btn">↩️ Reset</button>
         <button id="delete-btn" type="button" class="secondary-btn danger-btn">🗑️ Hapus data</button>
         <a id="open-report" class="secondary-btn" href="#">📊 Lihat rekap bulan ini</a>
         <span id="saved-at"></span>
       </div>
     </main>
+
+    <!-- Master Cleaning Program (khusus toilet) -->
+    <section id="mcp-section" class="page-card" style="display:none;margin-top:16px">
+      <div class="summary-header">
+        <h3>🧽 1. MASTER CLEANING PROGRAM (MCP)</h3>
+      </div>
+      <div class="mc-table-wrap">
+        <table class="mc-table">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Area</th>
+              <th>Standarisasi</th>
+              <th>Cek (B/X)</th>
+            </tr>
+          </thead>
+          <tbody id="mcp-standards"></tbody>
+        </table>
+      </div>
+      <div class="mc-tip">
+        Ketuk tombol <strong>B</strong> (Bersih) atau <strong>X</strong> (Kurang Bersih) pada setiap area sesuai hasil pengecekan.
+      </div>
+    </section>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
