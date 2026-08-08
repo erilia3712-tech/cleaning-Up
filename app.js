@@ -69,8 +69,7 @@ const ROOM_WORK_ITEMS = [
   'Membersihkan sofa',
   'Menyapu lantai',
   'Mengepel lantai',
-  'Membuang sampah',
-  'Membersihkan kaca'
+  'Membuang sampah'
 ];
 
 // Checklist pekerjaan cleaner - Toilet
@@ -447,7 +446,6 @@ function loadRoomPage(){
           <li>☑ Menyapu lantai</li>
           <li>☑ Mengepel lantai</li>
           <li>☑ Membuang sampah</li>
-          <li>☑ Membersihkan kaca</li>
         </ul>
       `;
     } else {
