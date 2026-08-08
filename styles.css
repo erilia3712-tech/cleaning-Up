@@ -90,7 +90,11 @@ body{
 .room-summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .info-pill{padding:8px 12px;border-radius:999px;background:#eef4ff;color:var(--accent);font-weight:600}
 .checklist-card{display:grid;gap:10px}
+.section-title{margin:8px 0 4px;font-weight:700;font-size:1.05rem;color:var(--text);display:flex;align-items:center;gap:8px}
 .check-item{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:12px 14px;border:1px solid var(--line);border-radius:16px;background:#fcfdff}
+.work-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:14px;background:#f8faff;cursor:pointer}
+.work-check{width:18px;height:18px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+.work-label{font-weight:600;cursor:pointer;flex:1}
 .item-label{font-weight:600;flex:1}
 .status-options{display:flex;gap:8px;flex-wrap:wrap}
 .status-btn{padding:8px 10px;border-radius:12px;border:1px solid #dbe7ff;background:#fff;color:#334155;cursor:pointer;font-weight:600;transition:all .2s ease}

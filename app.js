@@ -3,54 +3,87 @@
 // type: 'toilet'=> toilet (5 item khusus toilet)
 const ROOMS = [
   // ----- Lantai Bawah (11) -----
-  {id:'lb-klinik', floor:'Lantai Bawah', name:'Ruang Klinik', type:'room'},
-  {id:'lb-perpus', floor:'Lantai Bawah', name:'Ruang Perpus', type:'room'},
-  {id:'lb-tu', floor:'Lantai Bawah', name:'Ruang TU', type:'room'},
-  {id:'lb-keuangan', floor:'Lantai Bawah', name:'Ruang Keuangan', type:'room'},
-  {id:'lb-perkap', floor:'Lantai Bawah', name:'Ruang Perkap', type:'room'},
-  {id:'lb-toilet-klinik-cewe', floor:'Lantai Bawah', name:'Toilet Perempuan (Dekat Klinik)', type:'toilet'},
-  {id:'lb-toilet-klinik-cowo', floor:'Lantai Bawah', name:'Toilet Laki-Laki (Dekat Klinik)', type:'toilet'},
-  {id:'lb-toilet-dapur-cewe', floor:'Lantai Bawah', name:'Toilet Perempuan (Dekat Dapur)', type:'toilet'},
-  {id:'lb-toilet-dapur-cowo', floor:'Lantai Bawah', name:'Toilet Laki-Laki (Dekat Dapur)', type:'toilet'},
-  {id:'lb-gudang-perkap', floor:'Lantai Bawah', name:'Gudang Perkap', type:'room'},
-  {id:'lb-gudang-laundry', floor:'Lantai Bawah', name:'Gudang Laundry', type:'room'},
-  {id:'lb-gudang-chemicals', floor:'Lantai Bawah', name:'Gudang Chemicals', type:'room'},
-  {id:'lb-lobby', floor:'Lantai Bawah', name:'Lobby', type:'room'},
+  {id:'lb-klinik', floor:'Lantai Bawah', name:'Ruang Klinik', type:'room', rooms:'ruang'},
+  {id:'lb-perpus', floor:'Lantai Bawah', name:'Ruang Perpus', type:'room', rooms:'ruang'},
+  {id:'lb-tu', floor:'Lantai Bawah', name:'Ruang TU', type:'room', rooms:'ruang'},
+  {id:'lb-keuangan', floor:'Lantai Bawah', name:'Ruang Keuangan', type:'room', rooms:'ruang'},
+  {id:'lb-perkap', floor:'Lantai Bawah', name:'Ruang Perkap', type:'room', rooms:'ruang'},
+  {id:'lb-toilet-klinik-cewe', floor:'Lantai Bawah', name:'Toilet Perempuan (Dekat Klinik)', type:'toilet', gender:'cewe'},
+  {id:'lb-toilet-klinik-cowo', floor:'Lantai Bawah', name:'Toilet Laki-Laki (Dekat Klinik)', type:'toilet', gender:'cowo'},
+  {id:'lb-toilet-dapur-cewe', floor:'Lantai Bawah', name:'Toilet Perempuan (Dekat Dapur)', type:'toilet', gender:'cewe'},
+  {id:'lb-toilet-dapur-cowo', floor:'Lantai Bawah', name:'Toilet Laki-Laki (Dekat Dapur)', type:'toilet', gender:'cowo'},
+  {id:'lb-gudang-perkap', floor:'Lantai Bawah', name:'Gudang Perkap', type:'room', rooms:'ruang'},
+  {id:'lb-gudang-laundry', floor:'Lantai Bawah', name:'Gudang Laundry', type:'room', rooms:'ruang'},
+  {id:'lb-gudang-chemicals', floor:'Lantai Bawah', name:'Gudang Chemicals', type:'room', rooms:'ruang'},
+  {id:'lb-lobby', floor:'Lantai Bawah', name:'Lobby', type:'room', rooms:'ruang'},
 
   // ----- Lantai Atas (12) -----
-  {id:'la-pak-kapus', floor:'Lantai Atas', name:'Ruang Pak Kapus', type:'room'},
-  {id:'la-spri', floor:'Lantai Atas', name:'Ruang Spri', type:'room'},
-  {id:'la-podcast', floor:'Lantai Atas', name:'Ruang Podcast', type:'room'},
-  {id:'la-ppe', floor:'Lantai Atas', name:'Ruang PP&E', type:'room'},
-  {id:'la-sertifikasi', floor:'Lantai Atas', name:'Ruang Sertifikasi', type:'room'},
-  {id:'la-rapat', floor:'Lantai Atas', name:'Ruang Rapat', type:'room'},
-  {id:'la-kabid', floor:'Lantai Atas', name:'Ruang Kabid', type:'room'},
-  {id:'la-kerma', floor:'Lantai Atas', name:'Ruang Kerma', type:'room'},
-  {id:'la-wi', floor:'Lantai Atas', name:'Ruang WI', type:'room'},
-  {id:'la-mushola', floor:'Lantai Atas', name:'Mushola', type:'room'},
-  {id:'la-toilet-cewe', floor:'Lantai Atas', name:'Toilet Perempuan', type:'toilet'},
-  {id:'la-toilet-cowo', floor:'Lantai Atas', name:'Toilet Laki-Laki', type:'toilet'}
+  {id:'la-pak-kapus', floor:'Lantai Atas', name:'Ruang Pak Kapus', type:'room', rooms:'ruang'},
+  {id:'la-spri', floor:'Lantai Atas', name:'Ruang Spri', type:'room', rooms:'ruang'},
+  {id:'la-podcast', floor:'Lantai Atas', name:'Ruang Podcast', type:'room', rooms:'ruang'},
+  {id:'la-ppe', floor:'Lantai Atas', name:'Ruang PP&E', type:'room', rooms:'ruang'},
+  {id:'la-sertifikasi', floor:'Lantai Atas', name:'Ruang Sertifikasi', type:'room', rooms:'ruang'},
+  {id:'la-rapat', floor:'Lantai Atas', name:'Ruang Rapat', type:'room', rooms:'ruang'},
+  {id:'la-kabid', floor:'Lantai Atas', name:'Ruang Kabid', type:'room', rooms:'ruang'},
+  {id:'la-kerma', floor:'Lantai Atas', name:'Ruang Kerma', type:'room', rooms:'ruang'},
+  {id:'la-wi', floor:'Lantai Atas', name:'Ruang WI', type:'room', rooms:'ruang'},
+  {id:'la-mushola', floor:'Lantai Atas', name:'Mushola', type:'room', rooms:'ruang'},
+  {id:'la-toilet-cewe', floor:'Lantai Atas', name:'Toilet Perempuan', type:'toilet', gender:'cewe'},
+  {id:'la-toilet-cowo', floor:'Lantai Atas', name:'Toilet Laki-Laki', type:'toilet', gender:'cowo'}
 ];
 
 // ===================== ITEM PEMBERSIHAN =====================
-// Ruangan biasa
+// Kondisi Kebersihan - Ruangan biasa (berbasis objek/elemen, bukan kata kerja)
 const ROOM_CHECK_ITEMS = [
-  'Ngelap meja',
+  'Meja',
   'Sofa',
-  'Menyapu',
-  'Mengepel',
-  'Buang sampah',
-  'List kaca',
+  'Lantai',
+  'Tempat Sampah',
+  'List Kaca',
   'Kaca'
 ];
 
-// Toilet (sesuai data MCP & pengecekan toilet)
-const TOILET_CHECK_ITEMS = [
+// Kondisi Kebersihan - Toilet Perempuan (cewe)
+const TOILET_CEWE_CHECK_ITEMS = [
+  'Closet Duduk',
+  'Cermin',
+  'Wastafel',
+  'Lantai',
+  'Tempat Sampah',
+  'Kaca'
+];
+
+// Kondisi Kebersihan - Toilet Laki-Laki (cowo)
+const TOILET_COWO_CHECK_ITEMS = [
   'Closet',
   'Urinoir',
-  'Westafel',
+  'Cermin',
+  'Wastafel',
   'Lantai',
+  'Tempat Sampah',
   'Kaca'
+];
+
+// ===================== PEKERJAAN YANG DILAKUKAN =====================
+// Checklist pekerjaan cleaner - Ruangan biasa
+const ROOM_WORK_ITEMS = [
+  'Mengelap meja',
+  'Membersihkan sofa',
+  'Menyapu lantai',
+  'Mengepel lantai',
+  'Membuang sampah',
+  'Membersihkan kaca'
+];
+
+// Checklist pekerjaan cleaner - Toilet
+const TOILET_WORK_ITEMS = [
+  'Membersihkan closet',
+  'Membersihkan wastafel',
+  'Membersihkan cermin',
+  'Menyapu lantai',
+  'Mengepel lantai',
+  'Membuang sampah',
+  'Mengisi hand soap'
 ];
 
 // ===================== STATUS =====================
@@ -116,7 +149,15 @@ function getQrTargetUrl(roomId){
 
 function getCheckItems(room){
   if(!room) return ROOM_CHECK_ITEMS;
-  return room.type === 'toilet' ? TOILET_CHECK_ITEMS : ROOM_CHECK_ITEMS;
+  if(room.type === 'toilet'){
+    return room.gender === 'cewe' ? TOILET_CEWE_CHECK_ITEMS : TOILET_COWO_CHECK_ITEMS;
+  }
+  return ROOM_CHECK_ITEMS;
+}
+
+function getWorkItems(room){
+  if(!room) return ROOM_WORK_ITEMS;
+  return room.type === 'toilet' ? TOILET_WORK_ITEMS : ROOM_WORK_ITEMS;
 }
 
 // ===================== PENAMPIL DAFTAR RUANGAN (index) =====================
@@ -196,10 +237,10 @@ function getCurrentRecord(data, monthKey, dateKey){
   return data?.[monthKey]?.[dateKey] || null;
 }
 
-function setCurrentRecord(data, monthKey, dateKey, statuses, note, cleaner){
+function setCurrentRecord(data, monthKey, dateKey, statuses, note, cleaner, works){
   if(!monthKey || !dateKey) return data;
   if(!data[monthKey]) data[monthKey] = {};
-  data[monthKey][dateKey] = {statuses, note: note || '', cleaner: cleaner || '', savedAt:new Date().toISOString()};
+  data[monthKey][dateKey] = {statuses, note: note || '', cleaner: cleaner || '', works: works || [], savedAt:new Date().toISOString()};
   return data;
 }
 
@@ -283,7 +324,9 @@ function renderMonthReport(roomId, data, monthKey){
   const listEl = document.getElementById('month-report-list');
   if(!statsEl || !listEl) return;
 
-  const items = getCheckItems(getRoomById(roomId));
+  const room = getRoomById(roomId);
+  const items = getCheckItems(room);
+  const workItems = getWorkItems(room);
   const monthData = data?.[monthKey] || {};
   const entries = Object.entries(monthData).sort(([a], [b]) => b.localeCompare(a));
   const totalDays = entries.length;
@@ -317,6 +360,9 @@ function renderMonthReport(roomId, data, monthKey){
     const filled = Array.isArray(record.statuses) && record.statuses.length === items.length;
     const statuses = record.statuses || [];
     const statusText = items.map((it, i) => `${it}: ${getStatusLabel(statuses[i])}`).join(' · ');
+    const workArr = record.works || [];
+    const doneWorks = workItems.filter((_, i) => workArr[i] === true);
+    const workText = workItems.map((wk, i) => `${workArr[i] ? '☑' : '☐'} ${wk}`).join(' · ');
     const hasRusak = statuses.some(v => v === 4);
     const note = record.note ? `<div class="month-note">📝 ${record.note}</div>` : '';
     const cleaner = record.cleaner ? `<span>👤 ${record.cleaner}</span>` : '';
@@ -325,7 +371,9 @@ function renderMonthReport(roomId, data, monthKey){
         <span>${formatDateLabel(dateKey)} ${cleaner}</span>
         <span>${filled ? '✅ Lengkap' : '⚠️ Belum lengkap'} ${hasRusak ? '• 🔧 Rusak' : ''}</span>
       </div>
+      <div class="month-summary-meta"><span>🧹 ${doneWorks.length}/${workItems.length} pekerjaan</span></div>
       <div class="month-summary-meta"><span>${statusText}</span></div>
+      ${doneWorks.length ? `<div class="month-summary-meta"><span>✅ ${doneWorks.join(', ')}</span></div>` : ''}
       ${note}
     </div>`;
   }).join('');
@@ -376,6 +424,7 @@ function loadRoomPage(){
   }
 
   const items = getCheckItems(room);
+  const workItems = getWorkItems(room);
   const form = document.getElementById('checklist-form');
   const dateInput = document.getElementById('record-date');
   const monthInput = document.getElementById('record-month');
@@ -387,6 +436,7 @@ function loadRoomPage(){
   const resetBtn = document.getElementById('reset-btn');
 
   let currentStatuses = Array(items.length).fill('');
+  let currentWorks = Array(workItems.length).fill(false);
   let currentData = readRoomData(room.id);
 
   const today = new Date();
@@ -401,11 +451,21 @@ function loadRoomPage(){
     const dateKey = dateInput.value;
     const record = getCurrentRecord(currentData, monthKey, dateKey);
     currentStatuses = Array(items.length).fill('');
+    currentWorks = Array(workItems.length).fill(false);
     if(record?.statuses){
       currentStatuses = items.map((_, i) => record.statuses[i] || '');
     }
+    if(record?.works){
+      currentWorks = workItems.map((_, i) => record.works[i] === true);
+    }
     if(record?.cleaner && cleanerInput){ cleanerInput.value = record.cleaner || ''; }
     if(record?.note && noteInput){ noteInput.value = record.note || ''; }
+
+    // ====== Bagian 1: Kondisi Kebersihan ======
+    const secTitle1 = document.createElement('div');
+    secTitle1.className = 'section-title';
+    secTitle1.textContent = '🧽 Kondisi Kebersihan';
+    form.appendChild(secTitle1);
 
     items.forEach((it, idx) => {
       const row = document.createElement('div'); row.className='check-item';
@@ -430,6 +490,24 @@ function loadRoomPage(){
       row.appendChild(label); row.appendChild(opts); form.appendChild(row);
     });
 
+    // ====== Bagian 2: Pekerjaan yang dilakukan ======
+    const secTitle2 = document.createElement('div');
+    secTitle2.className = 'section-title';
+    secTitle2.textContent = '🧹 Pekerjaan yang dilakukan';
+    form.appendChild(secTitle2);
+
+    workItems.forEach((wk, idx) => {
+      const wrow = document.createElement('div'); wrow.className='work-item';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.className = 'work-check';
+      cb.checked = currentWorks[idx] === true;
+      cb.addEventListener('change', () => { currentWorks[idx] = cb.checked; });
+      const wlabel = document.createElement('label'); wlabel.className='work-label';
+      wlabel.textContent = wk;
+      wrow.appendChild(cb); wrow.appendChild(wlabel); form.appendChild(wrow);
+    });
+
     renderHistorySummary(currentData);
     updateReportLink(room.id, monthKey);
     const latestRecord = getCurrentRecord(currentData, monthKey, dateKey);
@@ -446,7 +524,7 @@ function loadRoomPage(){
     if(!monthKey || !dateKey) return;
     const note = noteInput ? noteInput.value.trim() : '';
     const cleaner = cleanerInput ? cleanerInput.value.trim() : '';
-    currentData = setCurrentRecord(currentData, monthKey, dateKey, currentStatuses, note, cleaner);
+    currentData = setCurrentRecord(currentData, monthKey, dateKey, currentStatuses, note, cleaner, currentWorks);
     saveRoomData(room.id, currentData);
     renderHistorySummary(currentData);
     updateReportLink(room.id, monthKey);
@@ -475,6 +553,7 @@ function loadRoomPage(){
     currentData = removeCurrentRecord(currentData, monthKey, dateKey);
     saveRoomData(room.id, currentData);
     currentStatuses = Array(items.length).fill('');
+    currentWorks = Array(workItems.length).fill(false);
     if(noteInput) noteInput.value = '';
     if(cleanerInput) cleanerInput.value = '';
     renderChecklist();
@@ -485,6 +564,7 @@ function loadRoomPage(){
     resetBtn.addEventListener('click', (e) => {
       e.preventDefault();
       currentStatuses = Array(items.length).fill('');
+      currentWorks = Array(workItems.length).fill(false);
       if(noteInput) noteInput.value = '';
       if(cleanerInput) cleanerInput.value = '';
       renderChecklist();
