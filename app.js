@@ -120,6 +120,15 @@ function getCheckItems(room){
 }
 
 // ===================== PENAMPIL DAFTAR RUANGAN (index) =====================
+// ===================== BARCODE / QR PER RUANGAN =====================
+// Kode unik per ruangan dibuat otomatis dari urutan ROOMS.
+// Ruangan baru yang ditambahkan ke ROOMS otomatis mendapat kode sendiri (tidak tertukar).
+function getRoomBarcode(room){
+  const idx = ROOMS.findIndex(r => r.id === room.id);
+  const prefix = room.floor.includes('Bawah') ? 'LB' : 'LA';
+  return `${prefix}-${String(idx + 1).padStart(3, '0')}`;
+}
+
 function createIndex(){
   const down = document.getElementById('floor-down');
   const up = document.getElementById('floor-up');
@@ -141,12 +150,21 @@ function createIndex(){
     const qrWrap = document.createElement('div'); qrWrap.className='qr';
     const link = getQrTargetUrl(r.id);
     try { new QRCode(qrWrap, {text:link,width:140,height:140}); } catch(e){}
+    // Label barcode: nama ruangan + kode unik (agar tidak tertukar saat scan/input)
+    const barcodeLabel = document.createElement('div');
+    barcodeLabel.className = 'barcode-label';
+    barcodeLabel.textContent = `${r.name}`;
+    const barcodeCode = document.createElement('div');
+    barcodeCode.className = 'barcode-code';
+    barcodeCode.textContent = getRoomBarcode(r);
     const a = document.createElement('a'); a.href = link; a.className='room-link'; a.textContent = 'Buka halaman';
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener');
     const head = document.createElement('div'); head.className='room-card-head';
     head.appendChild(title); head.appendChild(typeBadge);
-    card.appendChild(head); card.appendChild(sub); card.appendChild(qrWrap); card.appendChild(a);
+    card.appendChild(head); card.appendChild(sub); card.appendChild(qrWrap);
+    card.appendChild(barcodeLabel); card.appendChild(barcodeCode);
+    card.appendChild(a);
     if(r.floor.includes('Bawah')) down.appendChild(card); else up.appendChild(card);
   });
 }
@@ -342,6 +360,12 @@ function loadRoomPage(){
     barcodeQr.innerHTML = '';
     try { new QRCode(barcodeQr, {text: qrLink, width: 140, height: 140}); } catch(e){}
     barcodeQr.style.display = 'block';
+  }
+  // Label barcode konsisten dengan nama ruangan (agar tidak tertukar)
+  const roomBarcodeLabel = document.getElementById('barcode-label');
+  if(roomBarcodeLabel){
+    roomBarcodeLabel.textContent = `${room.name} — ${getRoomBarcode(room)}`;
+    roomBarcodeLabel.style.display = 'block';
   }
 
   // Tampilkan tabel MCP jika toilet
