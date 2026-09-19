@@ -39,7 +39,6 @@ const ROOM_CHECK_ITEMS = [
   'Sofa',
   'Lantai',
   'Tempat Sampah',
-  'List Kaca',
   'Kaca'
 ];
 
@@ -426,6 +425,7 @@ function loadRoomPage(){
   const dateInput = document.getElementById('record-date');
   const monthInput = document.getElementById('record-month');
   const cleanerInput = document.getElementById('record-cleaner');
+  const cleanerRoleInput = document.getElementById('record-cleaner-role');
   const noteInput = document.getElementById('record-note');
   const roomInstructions = document.getElementById('room-instructions');
   const saveBtn = document.getElementById('save-btn');
@@ -490,6 +490,7 @@ function loadRoomPage(){
       currentWorks = workItems.map((_, i) => record.works[i] === true);
     }
     if(record?.cleaner && cleanerInput){ cleanerInput.value = record.cleaner || ''; }
+    if(record?.cleanerRole && cleanerRoleInput){ cleanerRoleInput.value = record.cleanerRole || ''; }
     if(record?.note && noteInput){ noteInput.value = record.note || ''; }
 
     // ====== Bagian 1: Kondisi Kebersihan ======
@@ -555,7 +556,12 @@ function loadRoomPage(){
     if(!monthKey || !dateKey) return;
     const note = noteInput ? noteInput.value.trim() : '';
     const cleaner = cleanerInput ? cleanerInput.value.trim() : '';
+    const cleanerRole = cleanerRoleInput ? cleanerRoleInput.value : '';
     currentData = setCurrentRecord(currentData, monthKey, dateKey, currentStatuses, note, cleaner, currentWorks);
+    // Attach role to the saved record
+    if(!currentData[monthKey]) currentData[monthKey] = {};
+    if(!currentData[monthKey][dateKey]) currentData[monthKey][dateKey] = {};
+    currentData[monthKey][dateKey].cleanerRole = cleanerRole;
     saveRoomData(room.id, currentData);
     renderHistorySummary(currentData);
     updateReportLink(room.id, monthKey);
