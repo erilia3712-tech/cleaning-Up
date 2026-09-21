@@ -6,6 +6,7 @@ const os = require('os');
 const host = '0.0.0.0';
 const port = process.env.PORT || 3000;
 const rootDir = __dirname;
+const dataFile = path.join(rootDir, 'cleaning-data.json');
 
 const mimeTypes = {
   '.html': 'text/html; charset=utf-8',
@@ -46,6 +47,64 @@ function injectBaseUrl(html) {
   return html.replace('</head>', `<script>window.__APP_BASE_URL__ = '${baseUrl}';</script></head>`);
 }
 
+function readSharedData() {
+  try {
+    return JSON.parse(fs.readFileSync(dataFile, 'utf8')) || {};
+  } catch {
+    return {};
+  }
+}
+
+function writeSharedData(data) {
+  fs.writeFileSync(dataFile, JSON.stringify(data, null, 2), 'utf8');
+}
+
+function sendJson(res, statusCode, payload) {
+  res.writeHead(statusCode, {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type'
+  });
+  res.end(JSON.stringify(payload));
+}
+
+function handleDataApi(req, res, requestUrl) {
+  if (req.method === 'OPTIONS') {
+    sendJson(res, 204, {});
+    return true;
+  }
+
+  const match = requestUrl.pathname.match(/^\/api\/data\/([a-z0-9-]+)$/i);
+  if (!match) return false;
+
+  const roomId = match[1];
+  if (req.method === 'GET') {
+    sendJson(res, 200, readSharedData()[roomId] || {});
+    return true;
+  }
+
+  if (req.method === 'PUT') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const allData = readSharedData();
+        allData[roomId] = parsed && typeof parsed === 'object' ? parsed : {};
+        writeSharedData(allData);
+        sendJson(res, 200, {ok: true});
+      } catch {
+        sendJson(res, 400, {ok: false, error: 'Data tidak valid'});
+      }
+    });
+    return true;
+  }
+
+  sendJson(res, 405, {error: 'Method tidak didukung'});
+  return true;
+}
+
 function sendFile(res, filePath) {
   const ext = path.extname(filePath).toLowerCase();
   const contentType = mimeTypes[ext] || 'application/octet-stream';
@@ -69,6 +128,9 @@ function sendFile(res, filePath) {
 
 const server = http.createServer((req, res) => {
   const requestUrl = new URL(req.url, `http://${req.headers.host || `${host}:${port}`}`);
+
+  if (handleDataApi(req, res, requestUrl)) return;
+
   let filePath = safePath(requestUrl.pathname);
 
   if (!filePath.startsWith(rootDir)) {

@@ -116,17 +116,17 @@ const CEK_COLUMNS = ['Wastafel','Closet','Urinoir','Cermin','Shower','Lantai','P
 
 // ===================== HUB/PEMBANTU LINK =====================
 function getBaseUrl() {
-  return "https://erilia3712-tech.github.io/cleaning-Up";
+  if(window.__APP_BASE_URL__) return window.__APP_BASE_URL__;
+  if(window.location.hostname === 'erilia3712-tech.github.io'){
+    return 'https://erilia3712-tech.github.io/cleaning-Up';
+  }
+  return window.location.origin;
 }
 
 function buildAppUrl(path, params = {}) {
   let baseUrl;
 
-  if (window.location.hostname === "erilia3712-tech.github.io") {
-    baseUrl = "https://erilia3712-tech.github.io/cleaning-Up";
-  } else {
-    baseUrl = window.location.origin;
-  }
+  baseUrl = getBaseUrl();
 
   const url = new URL(path, baseUrl + "/");
 
@@ -232,6 +232,51 @@ function saveRoomData(roomId, data){
   }
 }
 
+function getSyncApiUrl(roomId){
+  const baseUrl = window.__APP_BASE_URL__ || `${window.location.protocol}//${window.location.hostname}:3000`;
+  return `${baseUrl}/api/data/${encodeURIComponent(roomId)}`;
+}
+
+async function loadSharedRoomData(roomId){
+  try {
+    const response = await fetch(getSyncApiUrl(roomId));
+    if(!response.ok) return null;
+    const sharedData = await response.json();
+    return sharedData && typeof sharedData === 'object' ? sharedData : {};
+  } catch {
+    return null;
+  }
+}
+
+async function saveSharedRoomData(roomId, data){
+  try {
+    const response = await fetch(getSyncApiUrl(roomId), {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+function mergeRoomData(localData, sharedData){
+  const merged = {...(sharedData || {})};
+  Object.entries(localData || {}).forEach(([monthKey, localDates]) => {
+    if(!merged[monthKey]) merged[monthKey] = {};
+    Object.entries(localDates || {}).forEach(([dateKey, localRecord]) => {
+      const sharedRecord = merged[monthKey][dateKey];
+      const localTime = Date.parse(localRecord?.savedAt || '') || 0;
+      const sharedTime = Date.parse(sharedRecord?.savedAt || '') || 0;
+      if(!sharedRecord || localTime >= sharedTime){
+        merged[monthKey][dateKey] = localRecord;
+      }
+    });
+  });
+  return merged;
+}
+
 function getMonthKey(dateValue){ return dateValue ? dateValue.slice(0, 7) : ''; }
 function getDateKey(dateValue){ return dateValue || ''; }
 
@@ -319,8 +364,15 @@ function loadSummaryPage(){
   monthInput.value = monthKey;
   backLink.href = buildAppUrl('room.html', {id: room.id});
 
-  const data = readRoomData(room.id);
+  let data = readRoomData(room.id);
   renderMonthReport(room.id, data, monthKey);
+
+  loadSharedRoomData(room.id).then(sharedData => {
+    if(!sharedData) return;
+    data = mergeRoomData(data, sharedData);
+    saveRoomData(room.id, data);
+    renderMonthReport(room.id, data, monthInput.value);
+  });
 
   monthInput.addEventListener('change', () => {
     const nextMonth = monthInput.value;
@@ -630,6 +682,7 @@ function loadRoomPage(){
     const cleanerPj = pjInput ? pjInput.value.trim() : '';
     currentData = setCurrentRecord(currentData, monthKey, dateKey, currentStatuses, note, cleanerOb, cleanerPj, currentWorks);
     const saved = saveRoomData(room.id, currentData);
+    saveSharedRoomData(room.id, currentData);
     renderHistorySummary(currentData);
     updateReportLink(room.id, monthKey);
     const record = getCurrentRecord(currentData, monthKey, dateKey);
@@ -691,6 +744,14 @@ function loadRoomPage(){
   dateInput.addEventListener('change', renderChecklist);
   monthInput.addEventListener('change', renderChecklist);
   renderChecklist();
+
+  loadSharedRoomData(room.id).then(sharedData => {
+    if(!sharedData) return;
+    currentData = mergeRoomData(currentData, sharedData);
+    saveRoomData(room.id, currentData);
+    saveSharedRoomData(room.id, currentData);
+    renderChecklist();
+  });
 }
 
 // ===================== TABEL MCP TOILET =====================
