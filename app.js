@@ -67,6 +67,7 @@ const TOILET_COWO_CHECK_ITEMS = [
 const ROOM_WORK_ITEMS = [
   'Mengelap meja',
   'Membersihkan sofa',
+  'Membersihkan kaca',
   'Menyapu lantai',
   'Mengepel lantai',
   'Membuang sampah'
@@ -223,7 +224,12 @@ function readRoomData(roomId){
 }
 
 function saveRoomData(roomId, data){
-  localStorage.setItem(getRoomStorageKey(roomId), JSON.stringify(data));
+  try {
+    localStorage.setItem(getRoomStorageKey(roomId), JSON.stringify(data));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function getMonthKey(dateValue){ return dateValue ? dateValue.slice(0, 7) : ''; }
@@ -393,8 +399,9 @@ function renderMonthReport(roomId, data, monthKey){
       const statuses = record.statuses || [];
       const workArr = record.works || [];
       const doneWorks = workItems.filter((_, i) => workArr[i] === true).length;
-      const cleanerOb = record.cleanerOb || (record.cleaner && record.works ? record.cleaner : '');
-      const cleanerPj = record.cleanerPj || (!record.cleanerOb && !record.cleanerPj && !record.works ? record.cleaner || '' : '');
+      const hasRoleFields = Object.prototype.hasOwnProperty.call(record, 'cleanerOb') || Object.prototype.hasOwnProperty.call(record, 'cleanerPj');
+      const cleanerOb = record.cleanerOb || (!hasRoleFields && record.cleaner ? record.cleaner : '');
+      const cleanerPj = record.cleanerPj || (!hasRoleFields && record.cleaner ? record.cleaner : '');
       return `<tr>
         <td>${formatDateLabel(dateKey)}</td>
         ${items.map((_, i) => `<td><span class="table-status status-${STATUS_TONES[(statuses[i] || 0) - 1] || 'kosong'}">${getStatusLabel(statuses[i])}</span></td>`).join('')}
@@ -536,8 +543,9 @@ function loadRoomPage(){
     if(record?.works){
       currentWorks = workItems.map((_, i) => record.works[i] === true);
     }
-    if(obInput){ obInput.value = record?.cleanerOb || (record?.cleaner && record?.works ? record.cleaner : ''); }
-    if(pjInput){ pjInput.value = record?.cleanerPj || (!record?.cleanerOb && !record?.cleanerPj && !record?.works ? record?.cleaner || '' : ''); }
+    const hasRoleFields = record && (Object.prototype.hasOwnProperty.call(record, 'cleanerOb') || Object.prototype.hasOwnProperty.call(record, 'cleanerPj'));
+    if(obInput){ obInput.value = record?.cleanerOb || (!hasRoleFields && record?.cleaner ? record.cleaner : ''); }
+    if(pjInput){ pjInput.value = record?.cleanerPj || (!hasRoleFields && record?.cleaner ? record.cleaner : ''); }
     if(record?.note && noteInput){ noteInput.value = record.note || ''; }
 
     const pjPanel = document.createElement('div');
@@ -567,6 +575,7 @@ function loadRoomPage(){
           Array.from(opts.children).forEach(c => c.classList.remove('active'));
           btn.classList.add('active');
           currentStatuses[idx] = i + 1;
+          saveCurrentRecord('autosave');
         });
         opts.appendChild(btn);
       });
@@ -591,7 +600,10 @@ function loadRoomPage(){
       cb.type = 'checkbox';
       cb.className = 'work-check';
       cb.checked = currentWorks[idx] === true;
-      cb.addEventListener('change', () => { currentWorks[idx] = cb.checked; });
+      cb.addEventListener('change', () => {
+        currentWorks[idx] = cb.checked;
+        saveCurrentRecord('autosave');
+      });
       const wlabel = document.createElement('label'); wlabel.className='work-label';
       wlabel.textContent = wk;
       wrow.appendChild(cb); wrow.appendChild(wlabel); obPanel.appendChild(wrow);
@@ -617,14 +629,24 @@ function loadRoomPage(){
     const cleanerOb = obInput ? obInput.value.trim() : '';
     const cleanerPj = pjInput ? pjInput.value.trim() : '';
     currentData = setCurrentRecord(currentData, monthKey, dateKey, currentStatuses, note, cleanerOb, cleanerPj, currentWorks);
-    saveRoomData(room.id, currentData);
+    const saved = saveRoomData(room.id, currentData);
     renderHistorySummary(currentData);
     updateReportLink(room.id, monthKey);
     const record = getCurrentRecord(currentData, monthKey, dateKey);
-    if(record?.savedAt){
+    if(saved && record?.savedAt && mode !== 'autosave'){
       showStatusMessage(`${mode === 'update' ? 'Data diperbarui' : 'Data disimpan'} untuk ${formatDateLabel(dateKey)} • ${formatMonthLabel(monthKey)}`);
+    } else if(saved && mode === 'autosave'){
+      showStatusMessage(`Tersimpan otomatis: ${new Date(record.savedAt).toLocaleString('id-ID')}`);
+    } else if(!saved){
+      showStatusMessage('Penyimpanan browser tidak tersedia.');
     }
   }
+
+  [obInput, pjInput, noteInput].forEach(input => {
+    if(input){
+      input.addEventListener('input', () => saveCurrentRecord('autosave'));
+    }
+  });
 
   saveBtn.addEventListener('click', (e) => {
     e.preventDefault();
