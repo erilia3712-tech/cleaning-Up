@@ -114,6 +114,10 @@ const CEK_STATUS = ['B', 'X'];
 // Daftar kolom pengecekan toilet (form user)
 const CEK_COLUMNS = ['Wastafel','Closet','Urinoir','Cermin','Shower','Lantai','Pewangi','Handsoap'];
 
+// Isi dari Supabase Project Settings > API agar data GitHub Pages tersinkron antar perangkat.
+const SUPABASE_URL = '';
+const SUPABASE_ANON_KEY = '';
+
 // ===================== HUB/PEMBANTU LINK =====================
 function getBaseUrl() {
   if(window.__APP_BASE_URL__) return window.__APP_BASE_URL__;
@@ -261,6 +265,46 @@ async function saveSharedRoomData(roomId, data){
   }
 }
 
+function isSupabaseConfigured(){
+  return Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+}
+
+async function loadCloudRoomData(roomId){
+  if(!isSupabaseConfigured()) return null;
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/room_data?room_id=eq.${encodeURIComponent(roomId)}&select=data`, {
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+      }
+    });
+    if(!response.ok) return null;
+    const rows = await response.json();
+    return rows[0]?.data && typeof rows[0].data === 'object' ? rows[0].data : {};
+  } catch {
+    return null;
+  }
+}
+
+async function saveCloudRoomData(roomId, data){
+  if(!isSupabaseConfigured()) return false;
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/room_data`, {
+      method: 'POST',
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+        Prefer: 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({room_id: roomId, data, updated_at: new Date().toISOString()})
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
 function mergeRoomData(localData, sharedData){
   const merged = {...(sharedData || {})};
   Object.entries(localData || {}).forEach(([monthKey, localDates]) => {
@@ -367,9 +411,10 @@ function loadSummaryPage(){
   let data = readRoomData(room.id);
   renderMonthReport(room.id, data, monthKey);
 
-  loadSharedRoomData(room.id).then(sharedData => {
-    if(!sharedData) return;
-    data = mergeRoomData(data, sharedData);
+  Promise.all([loadSharedRoomData(room.id), loadCloudRoomData(room.id)]).then(([sharedData, cloudData]) => {
+    if(!sharedData && !cloudData) return;
+    data = mergeRoomData(data, sharedData || {});
+    data = mergeRoomData(data, cloudData || {});
     saveRoomData(room.id, data);
     renderMonthReport(room.id, data, monthInput.value);
   });
@@ -683,6 +728,7 @@ function loadRoomPage(){
     currentData = setCurrentRecord(currentData, monthKey, dateKey, currentStatuses, note, cleanerOb, cleanerPj, currentWorks);
     const saved = saveRoomData(room.id, currentData);
     saveSharedRoomData(room.id, currentData);
+    saveCloudRoomData(room.id, currentData);
     renderHistorySummary(currentData);
     updateReportLink(room.id, monthKey);
     const record = getCurrentRecord(currentData, monthKey, dateKey);
@@ -719,6 +765,8 @@ function loadRoomPage(){
     if(!confirm('Hapus data pengecekan untuk tanggal ini?')) return;
     currentData = removeCurrentRecord(currentData, monthKey, dateKey);
     saveRoomData(room.id, currentData);
+    saveSharedRoomData(room.id, currentData);
+    saveCloudRoomData(room.id, currentData);
     currentStatuses = Array(items.length).fill('');
     currentWorks = Array(workItems.length).fill(false);
     if(noteInput) noteInput.value = '';
@@ -745,11 +793,13 @@ function loadRoomPage(){
   monthInput.addEventListener('change', renderChecklist);
   renderChecklist();
 
-  loadSharedRoomData(room.id).then(sharedData => {
-    if(!sharedData) return;
-    currentData = mergeRoomData(currentData, sharedData);
+  Promise.all([loadSharedRoomData(room.id), loadCloudRoomData(room.id)]).then(([sharedData, cloudData]) => {
+    if(!sharedData && !cloudData) return;
+    currentData = mergeRoomData(currentData, sharedData || {});
+    currentData = mergeRoomData(currentData, cloudData || {});
     saveRoomData(room.id, currentData);
     saveSharedRoomData(room.id, currentData);
+    saveCloudRoomData(room.id, currentData);
     renderChecklist();
   });
 }
