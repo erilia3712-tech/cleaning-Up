@@ -93,7 +93,15 @@ body{
 .room-summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .info-pill{padding:8px 12px;border-radius:999px;background:#eef4ff;color:var(--accent);font-weight:600}
 .checklist-card{display:grid;gap:10px}
+.role-switch{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 12px}
+.role-switch-btn{padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--muted);cursor:pointer;font:inherit;font-weight:700}
+.role-switch-btn.active[data-role="pj"]{background:#eff6ff;color:#1d4ed8;border-color:#93c5fd}
+.role-switch-btn.active[data-role="ob"]{background:#ecfdf5;color:#047857;border-color:#6ee7b7}
+.role-panel{display:grid;gap:10px}
+.role-panel[hidden]{display:none}
 .section-title{margin:8px 0 4px;font-weight:700;font-size:1.05rem;color:var(--text);display:flex;align-items:center;gap:8px}
+.section-title.role-pj{color:#1d4ed8;border-left:4px solid #2563eb;padding-left:10px}
+.section-title.role-ob{color:#047857;border-left:4px solid #10b981;padding-left:10px;margin-top:18px}
 .check-item{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:12px 14px;border:1px solid var(--line);border-radius:16px;background:#fcfdff}
 .work-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:14px;background:#f8faff;cursor:pointer}
 .work-check{width:18px;height:18px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
@@ -122,6 +130,8 @@ body{
 .secondary-btn{padding:10px 14px;border:1px solid var(--line);background:#fff;color:var(--accent);border-radius:999px;cursor:pointer;font-weight:700;text-decoration:none}
 .secondary-btn.danger-btn{color:#b91c1c;border-color:#fecaca;background:#fff5f5}
 .date-controls{display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:12px;margin-bottom:12px}
+.summary-print-control{display:flex;flex-direction:column;justify-content:flex-end;gap:6px}
+.field-label{color:var(--muted);font-size:0.95rem}
 .history-summary{display:grid;gap:8px;margin-bottom:12px}
 .history-pill{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fcfdff;color:var(--muted);font-size:0.92rem}
 .history-pill strong{color:var(--text)}
@@ -138,6 +148,22 @@ body{
 .month-summary-meta{display:flex;flex-wrap:wrap;gap:8px;color:var(--muted);font-size:0.9rem}
 .month-summary-meta span{display:inline-flex;align-items:center;gap:4px}
 .month-note{margin-top:6px;padding:8px 10px;border-radius:10px;background:#fff7ed;color:#9a3412;font-size:0.85rem;border:1px solid #fed7aa}
+.status-chart{display:grid;gap:12px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.chart-row{display:grid;grid-template-columns:minmax(120px, 180px) 1fr;align-items:center;gap:12px}
+.chart-label{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:0.9rem}
+.chart-label strong{color:var(--text)}
+.chart-track{height:16px;background:#eef2f7;border-radius:999px;overflow:hidden}
+.chart-bar{display:block;height:100%;border-radius:999px}
+.chart-bersih{background:#22c55e}.chart-kurang{background:#f59e0b}.chart-kotor{background:#ef4444}.chart-rusak{background:#475569}
+.report-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+.report-table{width:100%;border-collapse:collapse;min-width:980px;font-size:0.82rem;background:#fff}
+.report-table th,.report-table td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.report-table th{background:#eef4ff;color:var(--accent);font-weight:700;white-space:nowrap}
+.report-table tbody tr:nth-child(even){background:#f8fbff}
+.report-table tbody tr:last-child td{border-bottom:none}
+.table-status{display:inline-flex;padding:3px 7px;border-radius:6px;font-weight:700;white-space:nowrap}
+.status-bersih{background:#dcfce7;color:#166534}.status-kurang{background:#fef3c7;color:#92400e}.status-kotor{background:#fee2e2;color:#b91c1c}.status-rusak{background:#e2e8f0;color:#334155}.status-kosong{background:#f1f5f9;color:#64748b}
+.empty-report{padding:14px;color:var(--muted);text-align:center}
 #saved-at{color:var(--muted);font-size:0.95rem}
 .footer-note{text-align:center;color:var(--muted);margin-top:12px}
 
@@ -168,5 +194,20 @@ body{
   .history-pill{flex-direction:column;align-items:flex-start}
   .summary-header{flex-direction:column;align-items:flex-start}
   .room-card-head{flex-direction:column;align-items:flex-start}
+}
+
+@media print{
+  @page{size:landscape;margin:12mm}
+  body{background:#fff;color:#111827}
+  .app-shell{max-width:none;padding:0}
+  .page-header .back,.date-controls,.detail-card{display:none}
+  .page-card{padding:0;box-shadow:none;border-radius:0}
+  .summary-card{border:0;padding:0;margin:0 0 14px;box-shadow:none}
+  .summary-header{margin-bottom:8px}
+  .summary-header h3{font-size:1.05rem}
+  .report-table-wrap{overflow:visible;border:1px solid #94a3b8}
+  .report-table{min-width:0;font-size:8pt}
+  .report-table th,.report-table td{padding:5px;border-color:#cbd5e1}
+  .status-chart{break-inside:avoid}
 }
 

@@ -24,6 +24,10 @@
           <span>Pilih Bulan</span>
           <input type="month" id="summary-month" />
         </label>
+        <div class="summary-print-control">
+          <span class="field-label">Laporan</span>
+          <button id="print-summary" type="button" class="secondary-btn">🖨️ Cetak laporan</button>
+        </div>
       </div>
 
       <section class="summary-card">
@@ -31,8 +35,18 @@
           <h3>Ringkasan Bulan</h3>
           <div id="month-report-stats" class="summary-stats"></div>
         </div>
-        <div id="month-report-list" class="month-summary-list"></div>
+        <div id="month-report-chart" class="status-chart" aria-label="Grafik status kebersihan"></div>
       </section>
+
+      <section class="summary-card print-table-card">
+        <div class="summary-header">
+          <h3>Rekap Harian</h3>
+        </div>
+        <div class="report-table-wrap">
+          <table id="month-report-table" class="report-table"></table>
+        </div>
+      </section>
+
     </main>
   </div>
 

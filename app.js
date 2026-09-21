@@ -39,7 +39,8 @@ const ROOM_CHECK_ITEMS = [
   'Sofa',
   'Lantai',
   'Tempat Sampah',
-  'Kaca'
+  'Kaca',
+  'Kursi'
 ];
 
 // Kondisi Kebersihan - Toilet Perempuan (cewe)
@@ -233,10 +234,18 @@ function getCurrentRecord(data, monthKey, dateKey){
   return data?.[monthKey]?.[dateKey] || null;
 }
 
-function setCurrentRecord(data, monthKey, dateKey, statuses, note, cleaner, works){
+function setCurrentRecord(data, monthKey, dateKey, statuses, note, cleanerOb, cleanerPj, works){
   if(!monthKey || !dateKey) return data;
   if(!data[monthKey]) data[monthKey] = {};
-  data[monthKey][dateKey] = {statuses, note: note || '', cleaner: cleaner || '', works: works || [], savedAt:new Date().toISOString()};
+  data[monthKey][dateKey] = {
+    statuses,
+    note: note || '',
+    cleanerOb: cleanerOb || '',
+    cleanerPj: cleanerPj || '',
+    cleaner: cleanerPj || cleanerOb || '',
+    works: works || [],
+    savedAt:new Date().toISOString()
+  };
   return data;
 }
 
@@ -313,12 +322,18 @@ function loadSummaryPage(){
     history.replaceState({}, '', buildAppUrl('summary.html', {id: room.id, month: nextMonth}));
     renderMonthReport(room.id, data, nextMonth);
   });
+
+  const printButton = document.getElementById('print-summary');
+  if(printButton){
+    printButton.addEventListener('click', () => window.print());
+  }
 }
 
 function renderMonthReport(roomId, data, monthKey){
   const statsEl = document.getElementById('month-report-stats');
-  const listEl = document.getElementById('month-report-list');
-  if(!statsEl || !listEl) return;
+  const chartEl = document.getElementById('month-report-chart');
+  const tableEl = document.getElementById('month-report-table');
+  if(!statsEl || !chartEl || !tableEl) return;
 
   const room = getRoomById(roomId);
   const items = getCheckItems(room);
@@ -348,31 +363,47 @@ function renderMonthReport(roomId, data, monthKey){
     : '<span class="summary-chip">Belum ada data</span>';
 
   if(!totalDays){
-    listEl.innerHTML = '<div class="month-summary-item"><div class="month-summary-title">Data kosong</div><div class="month-summary-meta"><span>Belum ada catatan untuk bulan ini.</span></div></div>';
+    chartEl.innerHTML = '<div class="empty-report">Belum ada data untuk dibuat grafik.</div>';
+    tableEl.innerHTML = '<tbody><tr><td class="empty-report">Belum ada data rekap.</td></tr></tbody>';
     return;
   }
 
-  listEl.innerHTML = entries.map(([dateKey, record]) => {
-    const filled = Array.isArray(record.statuses) && record.statuses.length === items.length;
-    const statuses = record.statuses || [];
-    const statusText = items.map((it, i) => `${it}: ${getStatusLabel(statuses[i])}`).join(' · ');
-    const workArr = record.works || [];
-    const doneWorks = workItems.filter((_, i) => workArr[i] === true);
-    const workText = workItems.map((wk, i) => `${workArr[i] ? '☑' : '☐'} ${wk}`).join(' · ');
-    const hasRusak = statuses.some(v => v === 4);
-    const note = record.note ? `<div class="month-note">📝 ${record.note}</div>` : '';
-    const cleaner = record.cleaner ? `<span>👤 ${record.cleaner}</span>` : '';
-    return `<div class="month-summary-item ${hasRusak ? 'item-rusak' : ''}">
-      <div class="month-summary-title">
-        <span>${formatDateLabel(dateKey)} ${cleaner}</span>
-        <span>${filled ? '✅ Lengkap' : '⚠️ Belum lengkap'} ${hasRusak ? '• 🔧 Rusak' : ''}</span>
-      </div>
-      <div class="month-summary-meta"><span>🧹 ${doneWorks.length}/${workItems.length} pekerjaan</span></div>
-      <div class="month-summary-meta"><span>${statusText}</span></div>
-      ${doneWorks.length ? `<div class="month-summary-meta"><span>✅ ${doneWorks.join(', ')}</span></div>` : ''}
-      ${note}
-    </div>`;
-  }).join('');
+  const statusChartData = [
+    ['Bersih', 'bersih', statusCounts.bersih],
+    ['Kurang Bersih', 'kurang', statusCounts.kurang],
+    ['Kotor', 'kotor', statusCounts.kotor],
+    ['Rusak', 'rusak', statusCounts.rusak]
+  ];
+  const maxStatusCount = Math.max(...statusChartData.map(([, , count]) => count), 1);
+  const statusTotal = statusChartData.reduce((total, [, , count]) => total + count, 0);
+  chartEl.innerHTML = statusChartData.map(([label, tone, count]) => `
+    <div class="chart-row">
+      <div class="chart-label"><span>${label}</span><strong>${count} (${statusTotal ? Math.round((count / statusTotal) * 100) : 0}%)</strong></div>
+      <div class="chart-track"><span class="chart-bar chart-${tone}" style="width:${count ? Math.max((count / maxStatusCount) * 100, 4) : 0}%"></span></div>
+    </div>
+  `).join('');
+
+  tableEl.innerHTML = `
+    <thead><tr>
+      <th>Tanggal</th>
+      ${items.map(item => `<th>${item}</th>`).join('')}
+      <th>Pekerjaan OB</th><th>OB</th><th>PJ</th><th>Catatan</th>
+    </tr></thead>
+    <tbody>${entries.map(([dateKey, record]) => {
+      const statuses = record.statuses || [];
+      const workArr = record.works || [];
+      const doneWorks = workItems.filter((_, i) => workArr[i] === true).length;
+      const cleanerOb = record.cleanerOb || (record.cleaner && record.works ? record.cleaner : '');
+      const cleanerPj = record.cleanerPj || (!record.cleanerOb && !record.cleanerPj && !record.works ? record.cleaner || '' : '');
+      return `<tr>
+        <td>${formatDateLabel(dateKey)}</td>
+        ${items.map((_, i) => `<td><span class="table-status status-${STATUS_TONES[(statuses[i] || 0) - 1] || 'kosong'}">${getStatusLabel(statuses[i])}</span></td>`).join('')}
+        <td>${doneWorks}/${workItems.length}</td>
+        <td>${cleanerOb || '-'}</td><td>${cleanerPj || '-'}</td><td>${record.note || '-'}</td>
+      </tr>`;
+    }).join('')}</tbody>
+  `;
+
 }
 
 function updateReportLink(roomId, monthKey){
@@ -424,10 +455,11 @@ function loadRoomPage(){
   const form = document.getElementById('checklist-form');
   const dateInput = document.getElementById('record-date');
   const monthInput = document.getElementById('record-month');
-  const cleanerInput = document.getElementById('record-cleaner');
-  const cleanerRoleInput = document.getElementById('record-cleaner-role');
+  const obInput = document.getElementById('record-ob');
+  const pjInput = document.getElementById('record-pj');
   const noteInput = document.getElementById('record-note');
   const roomInstructions = document.getElementById('room-instructions');
+  const roleSwitchButtons = document.querySelectorAll('.role-switch-btn');
   const saveBtn = document.getElementById('save-btn');
   const updateBtn = document.getElementById('update-btn');
   const deleteBtn = document.getElementById('delete-btn');
@@ -437,9 +469,9 @@ function loadRoomPage(){
     if(room.type === 'room'){
       roomInstructions.innerHTML = `
         <strong>Untuk ruangan biasa</strong>
-        <p><strong>Kondisi Kebersihan</strong> dinilai per objek: Meja / Sofa / Lantai / Tempat Sampah / List Kaca / Kaca.</p>
+        <p><strong>PJ</strong> mengisi kondisi kebersihan per objek: Meja / Sofa / Lantai / Tempat Sampah / Kaca / Kursi.</p>
         <p>Setiap objek pilih: 🟢 Bersih, 🟡 Kurang Bersih, 🔴 Kotor, atau ⚫ Rusak.</p>
-        <p>“Pekerjaan yang dilakukan” dicatat terpisah dan bukan status objek.</p>
+        <p><strong>OB</strong> mengisi pekerjaan yang dilakukan pada bagian checklist pekerjaan.</p>
         <ul>
           <li>☑ Mengelap meja</li>
           <li>☑ Membersihkan sofa</li>
@@ -451,9 +483,9 @@ function loadRoomPage(){
     } else {
       roomInstructions.innerHTML = `
         <strong>Untuk toilet</strong>
-        <p><strong>Kondisi Kebersihan</strong> dinilai per item toilet: Closet / Cermin / Wastafel / Lantai / Tempat Sampah.</p>
+        <p><strong>PJ</strong> mengisi kondisi kebersihan per item toilet: Closet / Cermin / Wastafel / Lantai / Tempat Sampah.</p>
         <p>Setiap item pilih: 🟢 Bersih, 🟡 Kurang Bersih, 🔴 Kotor, atau ⚫ Rusak.</p>
-        <p>“Pekerjaan yang dilakukan” dicatat terpisah dan bukan status item.</p>
+        <p><strong>OB</strong> mengisi pekerjaan yang dilakukan pada bagian checklist pekerjaan.</p>
         <ul>
           <li>☑ Membersihkan closet</li>
           <li>☑ Membersihkan wastafel</li>
@@ -469,12 +501,27 @@ function loadRoomPage(){
   let currentStatuses = Array(items.length).fill('');
   let currentWorks = Array(workItems.length).fill(false);
   let currentData = readRoomData(room.id);
+  let selectedRole = 'pj';
 
   const today = new Date();
   const defaultDate = today.toISOString().split('T')[0];
   const defaultMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
   dateInput.value = defaultDate;
   monthInput.value = defaultMonth;
+
+  function setSelectedRole(role){
+    selectedRole = role === 'ob' ? 'ob' : 'pj';
+    roleSwitchButtons.forEach(button => {
+      button.classList.toggle('active', button.dataset.role === selectedRole);
+    });
+    form.querySelectorAll('[data-role-panel]').forEach(panel => {
+      panel.hidden = panel.dataset.rolePanel !== selectedRole;
+    });
+  }
+
+  roleSwitchButtons.forEach(button => {
+    button.addEventListener('click', () => setSelectedRole(button.dataset.role));
+  });
 
   function renderChecklist(){
     form.innerHTML = '';
@@ -489,15 +536,20 @@ function loadRoomPage(){
     if(record?.works){
       currentWorks = workItems.map((_, i) => record.works[i] === true);
     }
-    if(record?.cleaner && cleanerInput){ cleanerInput.value = record.cleaner || ''; }
-    if(record?.cleanerRole && cleanerRoleInput){ cleanerRoleInput.value = record.cleanerRole || ''; }
+    if(obInput){ obInput.value = record?.cleanerOb || (record?.cleaner && record?.works ? record.cleaner : ''); }
+    if(pjInput){ pjInput.value = record?.cleanerPj || (!record?.cleanerOb && !record?.cleanerPj && !record?.works ? record?.cleaner || '' : ''); }
     if(record?.note && noteInput){ noteInput.value = record.note || ''; }
 
-    // ====== Bagian 1: Kondisi Kebersihan ======
+    const pjPanel = document.createElement('div');
+    pjPanel.dataset.rolePanel = 'pj';
+    pjPanel.className = 'role-panel';
+    form.appendChild(pjPanel);
+
+    // ====== Bagian PJ: Kondisi Kebersihan ======
     const secTitle1 = document.createElement('div');
-    secTitle1.className = 'section-title';
-    secTitle1.textContent = '🧽 Kondisi Kebersihan';
-    form.appendChild(secTitle1);
+    secTitle1.className = 'section-title role-pj';
+    secTitle1.textContent = '👤 PJ — Kondisi Kebersihan';
+    pjPanel.appendChild(secTitle1);
 
     items.forEach((it, idx) => {
       const row = document.createElement('div'); row.className='check-item';
@@ -519,14 +571,19 @@ function loadRoomPage(){
         opts.appendChild(btn);
       });
 
-      row.appendChild(label); row.appendChild(opts); form.appendChild(row);
+      row.appendChild(label); row.appendChild(opts); pjPanel.appendChild(row);
     });
 
-    // ====== Bagian 2: Pekerjaan yang dilakukan ======
+    const obPanel = document.createElement('div');
+    obPanel.dataset.rolePanel = 'ob';
+    obPanel.className = 'role-panel';
+    form.appendChild(obPanel);
+
+    // ====== Bagian OB: Pekerjaan yang dilakukan ======
     const secTitle2 = document.createElement('div');
-    secTitle2.className = 'section-title';
-    secTitle2.textContent = '🧹 Pekerjaan yang dilakukan';
-    form.appendChild(secTitle2);
+    secTitle2.className = 'section-title role-ob';
+    secTitle2.textContent = '🧹 OB — Pekerjaan yang dilakukan';
+    obPanel.appendChild(secTitle2);
 
     workItems.forEach((wk, idx) => {
       const wrow = document.createElement('div'); wrow.className='work-item';
@@ -537,8 +594,10 @@ function loadRoomPage(){
       cb.addEventListener('change', () => { currentWorks[idx] = cb.checked; });
       const wlabel = document.createElement('label'); wlabel.className='work-label';
       wlabel.textContent = wk;
-      wrow.appendChild(cb); wrow.appendChild(wlabel); form.appendChild(wrow);
+      wrow.appendChild(cb); wrow.appendChild(wlabel); obPanel.appendChild(wrow);
     });
+
+    setSelectedRole(selectedRole);
 
     renderHistorySummary(currentData);
     updateReportLink(room.id, monthKey);
@@ -555,13 +614,9 @@ function loadRoomPage(){
     const dateKey = dateInput.value;
     if(!monthKey || !dateKey) return;
     const note = noteInput ? noteInput.value.trim() : '';
-    const cleaner = cleanerInput ? cleanerInput.value.trim() : '';
-    const cleanerRole = cleanerRoleInput ? cleanerRoleInput.value : '';
-    currentData = setCurrentRecord(currentData, monthKey, dateKey, currentStatuses, note, cleaner, currentWorks);
-    // Attach role to the saved record
-    if(!currentData[monthKey]) currentData[monthKey] = {};
-    if(!currentData[monthKey][dateKey]) currentData[monthKey][dateKey] = {};
-    currentData[monthKey][dateKey].cleanerRole = cleanerRole;
+    const cleanerOb = obInput ? obInput.value.trim() : '';
+    const cleanerPj = pjInput ? pjInput.value.trim() : '';
+    currentData = setCurrentRecord(currentData, monthKey, dateKey, currentStatuses, note, cleanerOb, cleanerPj, currentWorks);
     saveRoomData(room.id, currentData);
     renderHistorySummary(currentData);
     updateReportLink(room.id, monthKey);
@@ -592,7 +647,8 @@ function loadRoomPage(){
     currentStatuses = Array(items.length).fill('');
     currentWorks = Array(workItems.length).fill(false);
     if(noteInput) noteInput.value = '';
-    if(cleanerInput) cleanerInput.value = '';
+    if(obInput) obInput.value = '';
+    if(pjInput) pjInput.value = '';
     renderChecklist();
     showStatusMessage('Data dihapus untuk tanggal ini.');
   });
@@ -603,7 +659,8 @@ function loadRoomPage(){
       currentStatuses = Array(items.length).fill('');
       currentWorks = Array(workItems.length).fill(false);
       if(noteInput) noteInput.value = '';
-      if(cleanerInput) cleanerInput.value = '';
+      if(obInput) obInput.value = '';
+      if(pjInput) pjInput.value = '';
       renderChecklist();
       showStatusMessage('Form dikosongkan. Klik Simpan untuk menyimpan.');
     });

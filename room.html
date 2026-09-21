@@ -12,7 +12,7 @@
       <div>
         <a href="index.html" class="back">← Kembali</a>
         <h1 id="room-title">Ruangan</h1>
-        <p class="subtle">Isi form berikut dengan hasil cek kebersihan dan pekerjaan yang dilakukan.</p>
+        <p class="subtle">PJ mengisi kondisi kebersihan. OB mengisi pekerjaan yang dilakukan.</p>
       </div>
       <div id="barcode-label" class="barcode-label" style="display:none;margin-top:8px;"></div>
     </header>
@@ -28,14 +28,23 @@
           <input type="month" id="record-month" />
         </label>
         <label class="field-group">
-          <span>Nama Cleaner</span>
-          <input type="text" id="record-cleaner" placeholder="Nama petugas" />
+          <span>Nama OB</span>
+          <input type="text" id="record-ob" placeholder="Nama petugas OB" />
+        </label>
+        <label class="field-group">
+          <span>Nama PJ</span>
+          <input type="text" id="record-pj" placeholder="Nama penanggung jawab" />
         </label>
       </div>
 
       <div id="room-instructions" class="instruction-box"></div>
 
       <div id="history-summary" class="history-summary"></div>
+
+      <div class="role-switch" aria-label="Pilih jenis pengecekan">
+        <button type="button" class="role-switch-btn active" data-role="pj">👤 Mode PJ</button>
+        <button type="button" class="role-switch-btn" data-role="ob">🧹 Mode OB</button>
+      </div>
 
       <form id="checklist-form" class="checklist-card"></form>
 
