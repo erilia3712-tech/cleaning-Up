@@ -237,11 +237,13 @@ function saveRoomData(roomId, data){
 }
 
 function getSyncApiUrl(roomId){
+  if(window.location.hostname === 'erilia3712-tech.github.io') return '';
   const baseUrl = window.__APP_BASE_URL__ || `${window.location.protocol}//${window.location.hostname}:3000`;
   return `${baseUrl}/api/data/${encodeURIComponent(roomId)}`;
 }
 
 async function loadSharedRoomData(roomId){
+  if(!getSyncApiUrl(roomId)) return null;
   try {
     const response = await fetch(getSyncApiUrl(roomId));
     if(!response.ok) return null;
@@ -253,6 +255,7 @@ async function loadSharedRoomData(roomId){
 }
 
 async function saveSharedRoomData(roomId, data){
+  if(!getSyncApiUrl(roomId)) return false;
   try {
     const response = await fetch(getSyncApiUrl(roomId), {
       method: 'PUT',
