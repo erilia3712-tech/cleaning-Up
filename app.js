@@ -115,8 +115,8 @@ const CEK_STATUS = ['B', 'X'];
 const CEK_COLUMNS = ['Wastafel','Closet','Urinoir','Cermin','Shower','Lantai','Pewangi','Handsoap'];
 
 // Isi dari Supabase Project Settings > API agar data GitHub Pages tersinkron antar perangkat.
-const SUPABASE_URL = '';
-const SUPABASE_ANON_KEY = '';
+const SUPABASE_URL = 'https://gbmvgggyvcwlglugczft.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_0Kmcce09GNq6EOHEAI4yMg_279TFI19';
 
 // ===================== HUB/PEMBANTU LINK =====================
 function getBaseUrl() {
